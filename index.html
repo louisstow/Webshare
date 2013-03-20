@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" />
+	<link href="global.css" rel="stylesheet" />
+	<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
+</head>
+<body>
+
+<h1>File RTC</h1>
+
+<div class="container-fluid">
+<div class="row-fluid">
+
+<div id="left-nav" class="span3">
+
+	<div id="search-box" class="pane">
+		<form name="form">
+		<label><input type="search" name="search" placeholder="Search" /></label>
+		<label class="checkbox inline"><input type="checkbox" name="audio" checked /> Audio</label>
+		<label class="checkbox inline"><input type="checkbox" name="video" checked /> Video</label>
+		<label class="checkbox inline"><input type="checkbox" name="text" checked /> Text</label>
+		<button type="submit" class="btn">Search</button>
+		</form>
+	</div>
+
+	<div id="upload" class="pane">
+		<form name="form">
+		<label>File: <input type="file" name="file" /></label>
+		<label>Category:
+			<select name="type">
+				<option value="text">Text</option>
+				<option value="audio">Audio</option>
+				<option value="video">Video</option>
+			</select>
+		</label>
+		<label id="preview"></label>
+		<button class="btn">Index file</button>
+
+		<div class="progress">
+			<div id="progress" class="bar" style="width: 0%;"></div>
+		</div>
+		</form>
+	</div>
+
+</div>
+
+<div id="right-nav" class="span9">
+	<div id="files">
+		<h2>Files</h2>
+		<table id="files-table">
+			<tr><th>File</th><th>Size</th><th>Progress</th></tr>
+		</table>
+	</div>
+
+	<div id="transfers">
+		<h2>Transfers</h2>
+
+		<div class="tabbable">
+		  <ul class="nav nav-tabs">
+		    <li class="active"><a href="#downloads" data-toggle="tab">Downloads</a></li>
+		    <li><a href="#uploads" data-toggle="tab">Uploads</a></li>
+		  </ul>
+		</div>
+
+		<div class="tab-content">
+			<div id="downloads" class="active tab-pane">
+				Downloads
+			</div>
+
+			<div id="uploads" class="tab-pane">
+				Uploads
+			</div>
+		</div>
+	</div>
+
+</div>
+
+</div>
+</div>
+
+<script src="https://raw.github.com/louisstow/Spineless/develop/Spineless.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+<script src="src/main.js"></script>
+<script src="src/md5.js"></script>
+</body>
+</html>
