@@ -1,6 +1,10 @@
 var CHUNK_SIZE = 1000; //1000bytes... for testing
 
 var dbRef = new Firebase("https://filertc.firebaseIO.com/");
+var fileRef = dbRef.child('file');
+var chunkRef = dbRef.child('chunk');
+var peerRef = dbRef.child('peer');
+
 var worker = new Worker('src/worker.js');
 
 var UploadView = Spineless.View.extend({
@@ -19,16 +23,18 @@ var UploadView = Spineless.View.extend({
 	processFile: function (e) {
 		var file = e.target.files[0];
 		
-		this.data = {
+		this.fileData = {
 			size: file.size,
 			name: file.name,
-			chunks: {}
+			chunks: []
 		};
+
+		this.chunkData = {};
 
 		this.preview.innerHTML = file.name + " <var>" + file.size + "bytes</var>";
 
 		var chunkAmount = Math.ceil(file.size / CHUNK_SIZE);
-		this.data.chunkAmount = chunkAmount;
+		this.fileData.chunkAmount = chunkAmount;
 
 		//loop every chunk and hash it
 		for (var i = 0; i < chunkAmount; ++i) {
@@ -60,22 +66,17 @@ var UploadView = Spineless.View.extend({
 		if (evt.target.readyState !== FileReader.DONE) {
 			return;
 		}
-		
-		//var hash = md5(evt.target.result);
-		hash = Math.random() * 1000 | 0;
-		this.data.chunks[hash] = {
+
+		var hash = md5(evt.target.result);
+		this.chunkData[hash] = {
 			index: n,
-			size: size,
-			data: evt.target.result
+			size: size
 		};
 
-		if (n === this.data.chunkAmount -1) {
-			this.hashFile(this.data.chunks);
-		}
+		this.fileData.chunks[n] = hash;
 
 		//TODO: store this chunk in the DB
-
-		this.progress.style.width = (Math.floor((n + 1) / this.data.chunkAmount) * 100) + "%";
+		this.progress.style.width = (Math.floor((n + 1) / this.fileData.chunkAmount) * 100) + "%";
 
 		console.log("DATA LOADED");
 	},
@@ -83,10 +84,14 @@ var UploadView = Spineless.View.extend({
 	onHash: function (e) {
 		console.log("ON HASH", e.data);
 		worker.removeEventListener('message', this.onHash);
-		this.data.hash = e.data;
+		this.fileData.hash = e.data;
 	},
 
 	uploadFile: function (e) {
+		console.log(this.fileData, this.chunkData);
+		
+		fileRef.push(this.fileData);
+
 		e.preventDefault();
 
 		return false;

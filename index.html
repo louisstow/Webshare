@@ -18,9 +18,6 @@
 	<div id="search-box" class="pane">
 		<form name="form">
 		<label><input type="search" name="search" placeholder="Search" /></label>
-		<label class="checkbox inline"><input type="checkbox" name="audio" checked /> Audio</label>
-		<label class="checkbox inline"><input type="checkbox" name="video" checked /> Video</label>
-		<label class="checkbox inline"><input type="checkbox" name="text" checked /> Text</label>
 		<button type="submit" class="btn">Search</button>
 		</form>
 	</div>
@@ -28,13 +25,6 @@
 	<div id="upload" class="pane">
 		<form name="form">
 		<label>File: <input type="file" name="file" /></label>
-		<label>Category:
-			<select name="type">
-				<option value="text">Text</option>
-				<option value="audio">Audio</option>
-				<option value="video">Video</option>
-			</select>
-		</label>
 		<label id="preview"></label>
 		<button class="btn">Index file</button>
 
