@@ -92,6 +92,18 @@ var UploadView = Spineless.View.extend({
 		
 		fileRef.push(this.fileData);
 
+		//push metadata for each chunk
+		for (var hash in this.chunkData) {
+			var chunk = this.chunkData[hash];
+
+			chunkRef.push({
+				hash: hash,
+				size: chunk.size,
+				index: chunk.index,
+				fileHash: this.fileData.hash
+			});
+		}
+
 		e.preventDefault();
 
 		return false;
