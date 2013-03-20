@@ -29,7 +29,7 @@ var UploadView = Spineless.View.extend({
 
 		var chunkAmount = Math.ceil(file.size / CHUNK_SIZE);
 		this.data.chunkAmount = chunkAmount;
-		
+
 		//loop every chunk and hash it
 		for (var i = 0; i < chunkAmount; ++i) {
 			//create the file reader and events
@@ -43,19 +43,17 @@ var UploadView = Spineless.View.extend({
 			reader.onloadend = this.dataLoaded.bind(this, i, blob.size);
 			reader.readAsBinaryString(blob);
 		}
+
+		this.hashFile(file);
 	},
 
-	hashFile: function (chunks) {
-		var blob = [];
-		for (var hash in chunks) {
-			if (!chunks.hasOwnProperty(hash)) { continue; }
-			blob[chunks[hash].index] = chunks[hash].data;
-		}
-		
-		blob = blob.join("");
-		console.log(blob.length)
+	hashFile: function (file) {
+		var reader = new FileReader();
+		reader.onloadend = function (evt) {
+			worker.postMessage(evt.target.result);
+		};
 
-		worker.postMessage(blob);
+		reader.readAsText(file);
 	},
 
 	dataLoaded: function (n, size, evt) {
